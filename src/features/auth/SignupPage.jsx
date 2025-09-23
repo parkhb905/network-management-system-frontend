@@ -5,6 +5,7 @@ import { signUp } from '@/api/auth';
 import { toast } from 'react-toastify';
 
 export default function SignupPage() {
+    //
     const navigate = useNavigate();
 
     const [signUpForm, setSignUpForm] = useState({
