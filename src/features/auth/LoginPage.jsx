@@ -1,26 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
 import { login } from '@/api/auth';
+import { toast } from 'react-toastify';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             const result = await login({ username, password });
-            if (result.success) {
-                setMessage('로그인 성공');
+            if (result.token) {
+                navigate('/dashboard');
             } else {
-                setMessage('로그인 실패: ' + result.message);
+                console.log('로그인 실패: ' + result.message);
+                toast.warn('로그인 실패');
             }
         } catch (err) {
             console.error(err);
-            setMessage('서버 오류가 발생했습니다.');
+            toast.warn('서버 오류가 발생했습니다.');
         }
     };
 
@@ -30,7 +33,7 @@ export default function LoginPage() {
                 Network Management System
             </h2>
 
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={handleSubmit}>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
                     <input
@@ -54,14 +57,11 @@ export default function LoginPage() {
                 </div>
 
                 <button
-                    type="button"
-                    onClick={(e) => handleSubmit(e)}
+                    type="submit"
                     className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200"
                 >
                     Login
                 </button>
-
-                {message && <p>{message}</p>}
             </form>
 
             <p className="mt-6 text-sm text-center text-gray-600">

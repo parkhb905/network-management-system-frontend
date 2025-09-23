@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
 import { signUp } from '@/api/auth';
+import { toast } from 'react-toastify';
 
 export default function SignupPage() {
     const navigate = useNavigate();
@@ -26,10 +27,12 @@ export default function SignupPage() {
                 alert('회원가입 성공: ' + result);
                 navigate('/login');
             } else {
-                alert('회원가입 실패: ' + result.message);
+                console.log('회원가입 실패: ' + result.message);
+                toast.warn('회원가입 실패');
             }
         } catch (err) {
-            alert('회원가입 실패: ' + err.response?.data || '서버 오류');
+            console.log('회원가입 실패: ' + err.response?.data || '서버 오류');
+            toast.warn('회원가입 실패');
         }
     };
 
