@@ -1,3 +1,5 @@
+import { MESSAGES } from '@/common/constants/msg';
+import { showWarning } from '@/common/utils/toast';
 import axios from 'axios';
 
 const api = axios.create({
@@ -27,6 +29,7 @@ api.interceptors.response.use(
         if (err.response && err.response.status === 401) {
             localStorage.removeItem('token');
             window.location.href = '/login';
+            showWarning(MESSAGES.AUTH_EXPIRED);
         }
         return Promise.reject(err);
     }

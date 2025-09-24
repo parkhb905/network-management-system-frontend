@@ -2,7 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
 import { login } from '@/api/auth';
-import { toast } from 'react-toastify';
+import { showError } from '@/common/utils/toast';
+import { MESSAGES } from '@/common/constants/msg';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -18,12 +19,10 @@ export default function LoginPage() {
             if (result.token) {
                 navigate('/dashboard');
             } else {
-                console.log('로그인 실패: ' + result.message);
-                toast.warn('로그인 실패');
             }
         } catch (err) {
-            console.error(err);
-            toast.warn('서버 오류가 발생했습니다.');
+            console.error('로그인 에러: ' + err);
+            showError(MESSAGES.SERVER_ERROR);
         }
     };
 

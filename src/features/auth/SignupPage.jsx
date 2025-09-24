@@ -2,10 +2,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
 import { signUp } from '@/api/auth';
-import { toast } from 'react-toastify';
+import { showError } from '@/common/utils/toast';
+import { MESSAGES } from '@/common/constants/msg';
 
 export default function SignupPage() {
-    //
     const navigate = useNavigate();
 
     const [signUpForm, setSignUpForm] = useState({
@@ -25,15 +25,13 @@ export default function SignupPage() {
             const result = await signUp(signUpForm);
 
             if (result.success) {
-                alert('회원가입 성공: ' + result);
                 navigate('/login');
             } else {
-                console.log('회원가입 실패: ' + result.message);
-                toast.warn('회원가입 실패');
+                showError(MESSAGES.SERVER_ERROR);
             }
         } catch (err) {
-            console.log('회원가입 실패: ' + err.response?.data || '서버 오류');
-            toast.warn('회원가입 실패');
+            console.log('회원가입 실패: ' + err);
+            showError(MESSAGES.SERVER_ERROR);
         }
     };
 
