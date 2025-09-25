@@ -1,5 +1,5 @@
-import { MESSAGES } from '@/common/constants/msg';
-import { showWarning } from '@/common/utils/toast';
+import { ERROR_MESSAGES, MESSAGES } from '@/common/constants/msg';
+import { showError, showWarning } from '@/common/utils/toast';
 import axios from 'axios';
 
 const api = axios.create({
@@ -25,12 +25,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (err) => {
-        // 토큰 만료 or 인증 실패 -> 로그아웃 처리
-        if (err.response && err.response.status === 401) {
-            localStorage.removeItem('token');
-            window.location.href = '/login';
-            showWarning(MESSAGES.AUTH_EXPIRED);
+        if (err.response) {
+            const { status, data } = err.response;
+
+            if (status === 401 && data?.code === 1003) {
+                // 토큰 만료 -> 로그아웃 처리
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                showWarning(ERROR_MESSAGES[data?.code]);
+            }
+        } else {
+            showError(MESSAGES.NETWORK_ERROR);
         }
+
         return Promise.reject(err);
     }
 );

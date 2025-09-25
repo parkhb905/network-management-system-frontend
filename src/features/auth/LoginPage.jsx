@@ -3,7 +3,7 @@ import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
 import { login } from '@/api/auth';
 import { showError } from '@/common/utils/toast';
-import { MESSAGES } from '@/common/constants/msg';
+import { ERROR_MESSAGES, MESSAGES } from '@/common/constants/msg';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -18,11 +18,22 @@ export default function LoginPage() {
             const result = await login({ username, password });
             if (result.token) {
                 navigate('/dashboard');
-            } else {
             }
         } catch (err) {
             console.error('로그인 에러: ' + err);
-            showError(MESSAGES.SERVER_ERROR);
+
+            if (err.response) {
+                const { status, data } = err.response;
+
+                if (status === 401) {
+                    const message = ERROR_MESSAGES[data?.code];
+                    if (message) showError(message);
+                } else {
+                    showError(MESSAGES.SERVER_ERROR);
+                }
+            } else {
+                showError(MESSAGES.NETWORK_ERROR);
+            }
         }
     };
 
