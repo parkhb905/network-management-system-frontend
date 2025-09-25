@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { login } from '@/api/auth';
 import { showError } from '@/common/utils/toast';
 import { ERROR_MESSAGES, MESSAGES } from '@/common/constants/msg';
+import { required, validateForm } from '@/common/utils/validator';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -11,8 +12,20 @@ export default function LoginPage() {
 
     const navigate = useNavigate();
 
+    const rules = {
+        username: [required('아이디를 입력해주세요.')],
+        password: [required('비밀번호를 입력해주세요.')],
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // validation
+        const errorMessage = validateForm({ username, password }, rules);
+        if (errorMessage) {
+            showError(errorMessage);
+            return;
+        }
 
         try {
             const result = await login({ username, password });

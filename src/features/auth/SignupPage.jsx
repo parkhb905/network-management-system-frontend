@@ -2,8 +2,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
 import { signUp } from '@/api/auth';
-import { showError } from '@/common/utils/toast';
+import { showError, showWarning } from '@/common/utils/toast';
 import { MESSAGES } from '@/common/constants/msg';
+import {
+    emailFormat,
+    lengthBetween,
+    numberBetween,
+    required,
+    usernameFormat,
+    validateForm,
+} from '@/common/utils/validator';
 
 export default function SignupPage() {
     const navigate = useNavigate();
@@ -14,12 +22,36 @@ export default function SignupPage() {
         password: '',
     });
 
+    const rules = {
+        username: [
+            required('아이디를 입력해주세요.'),
+            lengthBetween('아이디', 4, 20),
+            usernameFormat(),
+        ],
+        email: [required('이메일을 입력해주세요.'), emailFormat()],
+        password: [required('비밀번호를 입력해주세요.'), lengthBetween('비밀번호', 8, 20)],
+    };
+
     const handleChange = (e) => {
-        setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setSignUpForm({ ...signUpForm, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // validation
+        const errorMessage = validateForm(signUpForm, rules);
+        if (errorMessage) {
+            showError(errorMessage);
+            return;
+        }
+
+        // 비밀번호, 확인 비밀번호 일치 여부 검사
+        if (signUpForm.password !== signUpForm.confirmPassword) {
+            showWarning('비밀번호가 일치하지 않습니다.');
+            return;
+        }
 
         try {
             const result = await signUp(signUpForm);
@@ -85,8 +117,12 @@ export default function SignupPage() {
                     </label>
                     <input
                         type="password"
+                        name="confirmPassword"
                         placeholder="Confirm your password"
+                        value={signUpForm.confirmPassword}
+                        onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        required
                     />
                 </div>
 
