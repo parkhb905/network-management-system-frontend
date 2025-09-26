@@ -1,5 +1,3 @@
-import { ERROR_MESSAGES, MESSAGES } from '@/common/constants/msg';
-import { showError, showWarning } from '@/common/utils/toast';
 import axios from 'axios';
 
 const api = axios.create({
@@ -12,8 +10,9 @@ const api = axios.create({
 // 요청 인터셉터
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
-        if (token) config.headers.Authorization = `Bearer ${token}`; // 헤더에 JWT 토큰 추가
+        const accessToken = localStorage.getItem('accessToken');
+        // 헤더에 JWT 토큰 추가
+        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
         return config;
     },
     (err) => {
@@ -24,21 +23,36 @@ api.interceptors.request.use(
 // 응답 인터셉터
 api.interceptors.response.use(
     (response) => response,
-    (err) => {
-        if (err.response) {
-            const { status, data } = err.response;
+    async (error) => {
+        const originalRequest = error.config;
+        const status = error.response?.status;
 
-            if (status === 401 && data?.code === 1003) {
-                // 토큰 만료 -> 로그아웃 처리
-                localStorage.removeItem('token');
+        // accessToken 만료 (401) && 재시도 한 번도 안한 경우
+        if (status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+                // accessToken 재발급 로직.
+                const refreshToken = localStorage.getItem('refreshToken');
+                if (!refreshToken) throw new Error('No refresh token');
+
+                const response = await axios.post('/api/auth/refresh', { refreshToken });
+                const newAccessToken = response.data.accessToken;
+                localStorage.setItem('accessToken', newAccessToken);
+
+                // 원래 요청 헤더 갱신 후 재시도
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return api(originalRequest);
+            } catch (err) {
+                // refresh 실패 -> 로그아웃 처리
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
                 window.location.href = '/login';
-                showWarning(ERROR_MESSAGES[data?.code]);
+                return Promise.reject(err);
             }
-        } else {
-            showError(MESSAGES.NETWORK_ERROR);
         }
 
-        return Promise.reject(err);
+        return Promise.reject(error);
     }
 );
 

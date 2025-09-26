@@ -1,10 +1,30 @@
+import { logout } from '@/store/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 export default function Navbar() {
+    const { username, isAuthenticated } = useSelector((state) => state.auth);
+
+    const dispatch = useDispatch();
+    const handleLogout = () => {
+        dispatch(logout());
+        window.location.href = '/login';
+    };
+
     return (
         <nav className="flex items-center justify-between px-6 py-3 bg-white shadow">
             <h1 className="text-xl font-bold text-blue-600">NMS Dashboard</h1>
             <div className="flex items-center space-x-4">
-                <button className="text-gray-600 hover:text-blue-600">🔔</button>
-                <span className="text-gray-700">admin</span>
+                {isAuthenticated && (
+                    <>
+                        <span className="text-blue-600">{username}</span>
+                        <button
+                            onClick={handleLogout}
+                            className="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600"
+                        >
+                            로그아웃
+                        </button>
+                    </>
+                )}
             </div>
         </nav>
     );

@@ -5,8 +5,12 @@ import { login } from '@/api/auth';
 import { showError } from '@/common/utils/toast';
 import { ERROR_MESSAGES, MESSAGES } from '@/common/constants/msg';
 import { required, validateForm } from '@/common/utils/validator';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '@/store/authSlice';
 
 export default function LoginPage() {
+    const dispatch = useDispatch();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -28,10 +32,27 @@ export default function LoginPage() {
         }
 
         try {
-            const result = await login({ username, password });
-            if (result.token) {
-                navigate('/dashboard');
-            }
+            const {
+                accessToken,
+                refreshToken,
+                username: serverUsername,
+            } = await login({
+                username,
+                password,
+            });
+
+            // 토큰 저장
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+
+            // Redux 반영
+            dispatch(setAuth({ username: serverUsername }));
+
+            // LocalStorage 반영
+            localStorage.setItem('username', serverUsername);
+
+            // 이동
+            navigate('/dashboard');
         } catch (err) {
             console.error('로그인 에러: ' + err);
 
