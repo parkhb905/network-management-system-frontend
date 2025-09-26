@@ -5,12 +5,15 @@ import SignupPage from './features/auth/SignupPage';
 import DashboardPage from './features/dashboard/DashboardPage';
 import { PrivateRoute } from './routes/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout, setAuth } from './store/authSlice';
 import { getMyInfo } from './api/auth';
+import MyPage from './features/mypage/MyPage';
 
 export default function App() {
     const dispatch = useDispatch();
+
+    const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
@@ -18,7 +21,7 @@ export default function App() {
 
         try {
             const savedUsername = localStorage.getItem('username');
-            if (savedUsername) dispatch(setAuth({ username: savedUsername }));
+            if (savedUsername) dispatch(setAuth({ ...auth, username: savedUsername }));
 
             getMyInfo()
                 .then((result) => {
@@ -44,6 +47,7 @@ export default function App() {
                     {/* 보호 라우트 */}
                     <Route element={<PrivateRoute />}>
                         <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/mypage" element={<MyPage />} />
                     </Route>
 
                     {/* 이외 경로: 리다이렉트 */}

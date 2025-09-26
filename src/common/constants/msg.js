@@ -1,4 +1,5 @@
 export const MESSAGES = {
+    DB_ERROR: 'DB 오류가 발생했습니다.',
     SERVER_ERROR: '서버 오류가 발생했습니다.',
 
     INSERT_SUCCESS: '등록되었습니다.',

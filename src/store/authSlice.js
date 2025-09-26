@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     username: null,
+    email: null,
     isAuthenticated: false,
 };
 
@@ -10,14 +11,17 @@ const authSlice = createSlice({
     initialState: initialState,
     reducers: {
         setAuth: (state, action) => {
-            state.username = action.payload.username;
+            const { username, email } = action.payload;
+            state.username = username;
+            state.email = email;
             state.isAuthenticated = true;
 
             // localStorage 저장
-            localStorage.setItem('username', action.payload.username);
+            localStorage.setItem('username', username);
         },
         logout: (state) => {
             state.username = initialState.username;
+            state.email = initialState.email;
             state.isAuthenticated = initialState.isAuthenticated;
 
             // localStorage 초기화

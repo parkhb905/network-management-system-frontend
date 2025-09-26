@@ -6,53 +6,61 @@ Spring Boot 기반 백엔드와 React 기반 프론트엔드로 구현되었으�
 ---
 
 ## 🚀 주요 기능
+
 - **사용자 관리**
-  - 회원가입, 로그인/로그아웃 (Spring Security + JWT)
-  - 아이디 / 비밀번호 찾기
-  - 마이페이지 (회원정보 수정, 회원탈퇴)
+    - 회원가입, 로그인/로그아웃 (Spring Security + JWT)
+    - 아이디 / 비밀번호 찾기
+    - 마이페이지 (회원정보 수정, 회원탈퇴)
 
 - **대시보드**
-  - 장비 현황 조회
-  - 성능 차트 시각화 (amCharts5)
+    - 장비 현황 조회
+    - 성능 차트 시각화 (amCharts5)
 
 - **장비 관리**
-  - 임계치 설정
+    - 임계치 설정
 
 - **성능 관리**
-  - 장비별 CPU / Memory / Traffic 조회  
-  - Max / Min / Avg / Latest 지표 제공  
-  - 필터별 검색 기능
+    - 장비별 CPU / Memory / Traffic 조회
+    - Max / Min / Avg / Latest 지표 제공
+    - 필터별 검색 기능
 
 - **통계**
-  - 일/주/월 단위 통계 조회  
-  - 엑셀 다운로드 지원
+    - 일/주/월 단위 통계 조회
+    - 엑셀 다운로드 지원
 
 - **공지사항**
-  - 첨부파일 업로드  
-  - 중요 공지사항 상단 고정  
-  - 기간별 표출 설정  
-  - 댓글, 조회수 기능
+    - 첨부파일 업로드
+    - 중요 공지사항 상단 고정
+    - 기간별 표출 설정
+    - 댓글, 조회수 기능
+
+- **이력관리**
+    - 사용자별 이력 조회 (AOP)
 
 ---
 
 ## 🛠️ 기술 스택
+
 **Back-end**
-- Java 17.0.12  
-- Spring Boot 3.5.6 (Maven)  
-- MariaDB 10.6.23  
-- MyBatis  
+
+- Java 17.0.12
+- Spring Boot 3.5.6 (Maven)
+- MariaDB 10.6.23
+- MyBatis
 - Spring Security (JWT)
 
 **Front-end**
-- React 19.1.1  
-- Node.js 20.19.4  
-- Vite  
-- TailwindCSS  
-- amCharts5  
+
+- React 19.1.1
+- Node.js 20.19.4
+- Vite
+- TailwindCSS
+- amCharts5
 
 ---
 
 ## 📂 프로젝트 구조
+
 ```plaintext
 📦network-management-system/
 ├── backend/
@@ -103,17 +111,19 @@ Spring Boot 기반 백엔드와 React 기반 프론트엔드로 구현되었으�
 ---
 
 ## ⚡ 실행 방법
-1) Backend
-``` bash
+
+1. Backend
+
+```bash
 ./mvnw clean install
 ./mvnw spring-boot:run
 ```
 
-2) Frontend
+2. Frontend
+
 ```bash
 npm install
 npm run dev
 ```
 
 ---
-
