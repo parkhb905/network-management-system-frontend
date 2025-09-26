@@ -26,9 +26,10 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
         const status = error.response?.status;
+        const code = error.response?.data?.code;
 
-        // accessToken 만료 (401) && 재시도 한 번도 안한 경우
-        if (status === 401 && !originalRequest._retry) {
+        // accessToken 만료 (401) && 1001, 1002 제외 && 재시도 한 번도 안한 경우
+        if (status === 401 && code !== 1001 && code !== 1002 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
