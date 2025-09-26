@@ -5,7 +5,7 @@ import SignupPage from './features/auth/SignupPage';
 import DashboardPage from './features/dashboard/DashboardPage';
 import { PrivateRoute } from './routes/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logout, setAuth } from './store/authSlice';
 import { getMyInfo } from './api/auth';
 import MyPage from './features/mypage/MyPage';
@@ -13,19 +13,18 @@ import MyPage from './features/mypage/MyPage';
 export default function App() {
     const dispatch = useDispatch();
 
-    const auth = useSelector((state) => state.auth);
-
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) return;
 
+        // 새로고침 시 Redux 복구 로직
         try {
             const savedUsername = localStorage.getItem('username');
-            if (savedUsername) dispatch(setAuth({ ...auth, username: savedUsername }));
+            if (savedUsername) dispatch(setAuth({ username: savedUsername }));
 
             getMyInfo()
-                .then((result) => {
-                    dispatch(setAuth(result));
+                .then((data) => {
+                    dispatch(setAuth(data));
                 })
                 .catch((err) => {
                     dispatch(logout());

@@ -1,3 +1,5 @@
+import api from "./axios";
+
 export const updateUser = async (formData) => {
     const response = await api.put('/user/me', formData);
     return response.data;

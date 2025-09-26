@@ -12,8 +12,13 @@ const authSlice = createSlice({
     reducers: {
         setAuth: (state, action) => {
             const { username, email } = action.payload;
-            state.username = username;
-            state.email = email;
+            
+            if(username) {
+                state.username = username;
+            }
+            if(email) {
+                state.email = email;
+            }
             state.isAuthenticated = true;
 
             // localStorage 저장
