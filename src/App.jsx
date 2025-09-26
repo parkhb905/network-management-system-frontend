@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { logout, setAuth } from './store/authSlice';
 import { getMyInfo } from './api/auth';
+import MyPage from './features/mypage/MyPage';
 
 export default function App() {
     const dispatch = useDispatch();
@@ -16,13 +17,14 @@ export default function App() {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) return;
 
+        // 새로고침 시 Redux 복구 로직
         try {
             const savedUsername = localStorage.getItem('username');
             if (savedUsername) dispatch(setAuth({ username: savedUsername }));
 
             getMyInfo()
-                .then((result) => {
-                    dispatch(setAuth(result));
+                .then((data) => {
+                    dispatch(setAuth(data));
                 })
                 .catch((err) => {
                     dispatch(logout());
@@ -44,6 +46,7 @@ export default function App() {
                     {/* 보호 라우트 */}
                     <Route element={<PrivateRoute />}>
                         <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/mypage" element={<MyPage />} />
                     </Route>
 
                     {/* 이외 경로: 리다이렉트 */}

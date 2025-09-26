@@ -36,6 +36,7 @@ export default function LoginPage() {
                 accessToken,
                 refreshToken,
                 username: serverUsername,
+                email,
             } = await login({
                 username,
                 password,
@@ -46,7 +47,7 @@ export default function LoginPage() {
             localStorage.setItem('refreshToken', refreshToken);
 
             // Redux 반영
-            dispatch(setAuth({ username: serverUsername }));
+            dispatch(setAuth({ username: serverUsername, email: email }));
 
             // LocalStorage 반영
             localStorage.setItem('username', serverUsername);

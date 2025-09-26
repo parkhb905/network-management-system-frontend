@@ -1,5 +1,6 @@
 import { logout } from '@/store/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
     const { username, isAuthenticated } = useSelector((state) => state.auth);
@@ -16,7 +17,12 @@ export default function Navbar() {
             <div className="flex items-center space-x-4">
                 {isAuthenticated && (
                     <>
-                        <span className="text-blue-600">{username}</span>
+                        <Link
+                            to="/mypage"
+                            className="text-sm font-medium text-blue-600 hover:underline"
+                        >
+                            {username}
+                        </Link>
                         <button
                             onClick={handleLogout}
                             className="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600"
