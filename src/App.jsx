@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux';
 import { logout, setAuth } from './store/authSlice';
 import { getMyInfo } from './api/auth';
 import MyPage from './features/mypage/MyPage';
+import DeviceList from './features/devices/DeviceList';
+import DeviceForm from './features/devices/DeviceForm';
 
 export default function App() {
     const dispatch = useDispatch();
@@ -47,6 +49,9 @@ export default function App() {
                     <Route element={<PrivateRoute />}>
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/mypage" element={<MyPage />} />
+                        <Route path="/devices" element={<DeviceList />} />
+                        <Route path="/devices/new" element={<DeviceForm mode="create" />} />
+                        <Route path="/devices/:id" element={<DeviceForm mode="update" />} />
                     </Route>
 
                     {/* 이외 경로: 리다이렉트 */}

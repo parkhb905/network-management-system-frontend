@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
 import { signUp } from '@/api/auth';
-import { showError, showWarning } from '@/common/utils/toast';
+import { showError, showSuccess, showWarning } from '@/common/utils/toast';
 import { MESSAGES } from '@/common/constants/msg';
 import {
     emailFormat,
@@ -57,6 +57,7 @@ export default function SignupPage() {
             const result = await signUp(signUpForm);
 
             if (result.success) {
+                showSuccess('회원가입 완료되었습니다.');
                 navigate('/login');
             } else {
                 showError(MESSAGES.SERVER_ERROR);

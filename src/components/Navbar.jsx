@@ -13,7 +13,13 @@ export default function Navbar() {
 
     return (
         <nav className="flex items-center justify-between px-6 py-3 bg-white shadow">
-            <h1 className="text-xl font-bold text-blue-600">NMS Dashboard</h1>
+            <Link
+                to="/dashboard"
+                className="text-sm font-medium text-blue-600 hover:underline"
+            >
+                <h1 className="text-xl font-bold text-blue-600">NMS</h1>
+
+            </Link>
             <div className="flex items-center space-x-4">
                 {isAuthenticated && (
                     <>

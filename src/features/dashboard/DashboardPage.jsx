@@ -4,7 +4,7 @@ import React from 'react';
 const DashboardPage = () => {
     return (
         <MainLayout>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            {/* <h1 className="text-3xl font-bold">Dashboard</h1> */}
         </MainLayout>
     );
 };

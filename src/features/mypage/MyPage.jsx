@@ -1,4 +1,4 @@
-import { updateUser } from '@/api/user';
+import { deleteUser, updateUser } from '@/api/user';
 import { MESSAGES } from '@/common/constants/msg';
 import { showError, showSuccess, showWarning } from '@/common/utils/toast';
 import { emailFormat, lengthBetween, validateForm } from '@/common/utils/validator';
@@ -84,7 +84,21 @@ const MyPage = () => {
         }
     };
 
-    const handleDelete = async () => { };
+    const handleDelete = async () => {
+        try {
+            const result = await deleteUser();
+            
+            if(result.success) {
+                showSuccess('회원탈퇴 되었습니다.');
+                navigate("/");
+            } else {
+                showError(MESSAGES.SERVER_ERROR);
+            }
+        } catch(err) { 
+            console.log('회원탈퇴 실패: ' + err);
+            showError(MESSAGES.SERVER_ERROR);
+        }
+    };
 
     return (
         <MainLayout>
