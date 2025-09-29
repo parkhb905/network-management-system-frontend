@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
-import { signUp } from '@/api/auth';
+import { signUp } from '@/api/auth/auth';
 import { showError, showSuccess, showWarning } from '@/common/utils/toast';
 import { MESSAGES } from '@/common/constants/msg';
 import {

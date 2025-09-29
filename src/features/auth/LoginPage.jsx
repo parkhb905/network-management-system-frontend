@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useState } from 'react';
-import { login } from '@/api/auth';
+import { login } from '@/api/auth/auth';
 import { showError } from '@/common/utils/toast';
 import { ERROR_MESSAGES, MESSAGES } from '@/common/constants/msg';
 import { required, validateForm } from '@/common/utils/validator';

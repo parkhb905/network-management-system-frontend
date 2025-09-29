@@ -1,4 +1,4 @@
-import { deleteUser, updateUser } from '@/api/user';
+import { deleteUser, updateUser } from '@/api/user/user';
 import { MESSAGES } from '@/common/constants/msg';
 import { showError, showSuccess, showWarning } from '@/common/utils/toast';
 import { emailFormat, lengthBetween, validateForm } from '@/common/utils/validator';
@@ -20,8 +20,8 @@ const MyPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
 
     useEffect(() => {
-        setNewEmail(email)
-    }, [email])
+        setNewEmail(email);
+    }, [email]);
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -49,10 +49,13 @@ const MyPage = () => {
             }
 
             payload.email = newEmail;
-        };
+        }
         if (currentPassword && newPassword) {
             // validation
-            const errorMessage = validateForm({ newPassword }, { newPassword: [lengthBetween('비밀번호', 8, 20)] });
+            const errorMessage = validateForm(
+                { newPassword },
+                { newPassword: [lengthBetween('비밀번호', 8, 20)] }
+            );
             if (errorMessage) {
                 showError(errorMessage);
                 return;
@@ -73,8 +76,8 @@ const MyPage = () => {
 
             if (result.success) {
                 showSuccess('회원정보가 수정되었습니다.');
-                dispatch(setAuth({ email: newEmail }))
-                navigate("/dashboard");
+                dispatch(setAuth({ email: newEmail }));
+                navigate('/dashboard');
             } else {
                 showError(MESSAGES.SERVER_ERROR);
             }
@@ -87,14 +90,14 @@ const MyPage = () => {
     const handleDelete = async () => {
         try {
             const result = await deleteUser();
-            
-            if(result.success) {
+
+            if (result.success) {
                 showSuccess('회원탈퇴 되었습니다.');
-                navigate("/");
+                navigate('/');
             } else {
                 showError(MESSAGES.SERVER_ERROR);
             }
-        } catch(err) { 
+        } catch (err) {
             console.log('회원탈퇴 실패: ' + err);
             showError(MESSAGES.SERVER_ERROR);
         }
@@ -129,7 +132,12 @@ const MyPage = () => {
 
                         <div className="mt-2 space-y-2">
                             <div>
-                                <label htmlFor="currentPassword" className="block text-xs text-gray-600">현재 비밀번호</label>
+                                <label
+                                    htmlFor="currentPassword"
+                                    className="block text-xs text-gray-600"
+                                >
+                                    현재 비밀번호
+                                </label>
                                 <input
                                     id="currentPassword"
                                     type="password"
@@ -140,7 +148,12 @@ const MyPage = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="newPassword" className="block text-xs text-gray-600">새 비밀번호</label>
+                                <label
+                                    htmlFor="newPassword"
+                                    className="block text-xs text-gray-600"
+                                >
+                                    새 비밀번호
+                                </label>
                                 <input
                                     id="newPassword"
                                     type="password"
@@ -151,7 +164,12 @@ const MyPage = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="confirmPassword" className="block text-xs text-gray-600">새 비밀번호 확인</label>
+                                <label
+                                    htmlFor="confirmPassword"
+                                    className="block text-xs text-gray-600"
+                                >
+                                    새 비밀번호 확인
+                                </label>
                                 <input
                                     id="confirmPassword"
                                     type="password"
