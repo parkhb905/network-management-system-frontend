@@ -1,4 +1,4 @@
-import api from './axios';
+import api from '../axios';
 
 // 회원가입
 export const signUp = async (formData) => {
