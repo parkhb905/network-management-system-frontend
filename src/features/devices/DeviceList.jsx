@@ -23,7 +23,7 @@ const columns = [
     }),
     columnHelper.accessor('deviceTypeName', {
         cell: (info) => info.renderValue(),
-        header: () => '장비종류명',
+        header: () => '장비구분명',
     }),
     columnHelper.accessor('vendorName', {
         header: () => <span>제조사명</span>,
