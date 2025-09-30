@@ -40,13 +40,13 @@ const columns = [
 const DeviceList = () => {
     const [devices, setDevices] = useState([]);
     const [page, setPage] = useState(1);
-    const [size] = useState(10);
+    const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
 
     const loadDevices = async () => {
         try {
-            const result = await getDevices(page, size);
+            const result = await getDevices(page, pageSize);
 
             if (result.success) {
                 setDevices(result.content);
@@ -63,7 +63,7 @@ const DeviceList = () => {
 
     useEffect(() => {
         loadDevices();
-    }, [page, size]);
+    }, [page, pageSize]);
 
     return (
         <MainLayout>
@@ -84,7 +84,12 @@ const DeviceList = () => {
                     totalElements={totalElements}
                     columns={columns}
                     page={page}
+                    pageSize={pageSize}
                     onPageChange={setPage}
+                    onPageSizeChange={(newPageSize) => {
+                        setPageSize(newPageSize);
+                        setPage(1); // 페이지 크기 바꾸면 1페이지로 초기화
+                    }}
                 />
             </div>
         </MainLayout>
