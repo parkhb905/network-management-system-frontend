@@ -18,7 +18,18 @@ const columns = [
     }),
     columnHelper.accessor((row) => row.deviceName, {
         id: 'deviceName',
-        cell: (info) => <i>{info.getValue()}</i>,
+        cell: (info) => {
+            // console.log(info);
+            return (
+                <Link
+                    to={`/devices/${info.row.original.deviceId}`}
+                    className="text-blue-600 hover:underline"
+                >
+                    {/* {info.row.original.deviceName} */}
+                    {info.getValue()}
+                </Link>
+            );
+        },
         header: () => <span>장비명</span>,
     }),
     columnHelper.accessor('deviceTypeName', {

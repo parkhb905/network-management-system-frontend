@@ -13,6 +13,7 @@ import DeviceList from './features/devices/DeviceList';
 import DeviceForm from './features/devices/DeviceForm';
 import CodeGroupPage from './features/codeGroup/CodeGroupPage';
 import CodePage from './features/code/codePage';
+import DeviceDetail from './features/devices/DeviceDetail';
 
 export default function App() {
     const dispatch = useDispatch();
@@ -52,8 +53,8 @@ export default function App() {
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/mypage" element={<MyPage />} />
                         <Route path="/devices" element={<DeviceList />} />
-                        <Route path="/devices/new" element={<DeviceForm mode="create" />} />
-                        <Route path="/devices/:id" element={<DeviceForm mode="update" />} />
+                        <Route path="/devices/new" element={<DeviceForm />} />
+                        <Route path="/devices/:deviceId" element={<DeviceDetail />} />
                         <Route path="/codeGroup" element={<CodeGroupPage />} />
                         <Route path="/code" element={<CodePage />} />
                     </Route>
