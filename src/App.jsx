@@ -55,8 +55,8 @@ export default function App() {
                         <Route path="/devices" element={<DeviceList />} />
                         <Route path="/devices/new" element={<DeviceForm />} />
                         <Route path="/devices/:deviceId" element={<DeviceDetail />} />
-                        <Route path="/codeGroup" element={<CodeGroupPage />} />
-                        <Route path="/code" element={<CodePage />} />
+                        {/* <Route path="/codeGroup" element={<CodeGroupPage />} /> */}
+                        {/* <Route path="/code" element={<CodePage />} /> */}
                     </Route>
 
                     {/* 이외 경로: 리다이렉트 */}
