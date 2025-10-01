@@ -9,12 +9,16 @@ export default function Table({
     pageSize,
     onPageChange,
     onPageSizeChange,
+    rowSelection,
+    onRowSelectionChange,
+    idKey,
 }) {
     const table = useReactTable({
         columns,
         data,
         pageCount: totalPages,
         state: {
+            rowSelection,
             pagination: {
                 pageIndex: page - 1,
                 pageSize: pageSize,
@@ -22,6 +26,9 @@ export default function Table({
         },
         manualPagination: true,
         getCoreRowModel: getCoreRowModel(),
+        enableRowSelection: true, // row 선택 기능 활성화
+        onRowSelectionChange,
+        getRowId: (row) => row[idKey], // 고유 키 지정
     });
 
     const groupIdx = Math.floor((page - 1) / pageSize);

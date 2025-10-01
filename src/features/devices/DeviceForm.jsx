@@ -3,7 +3,7 @@ import { MESSAGES } from '@/common/constants/msg';
 import { showError, showSuccess } from '@/common/utils/toast';
 import MainLayout from '@/layouts/MainLayout';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const DeviceForm = () => {
     const navigate = useNavigate();

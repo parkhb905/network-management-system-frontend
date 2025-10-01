@@ -26,3 +26,10 @@ export const updateDevice = async (deviceId, formData) => {
     const response = await api.put(`/devices/${deviceId}`, formData);
     return response.data;
 };
+
+export const deleteDevice = async (selectDeviceIds) => {
+    const response = await api.delete('/devices', {
+        data: selectDeviceIds, // DELETE이지만 body로 전달.
+    });
+    return response.data;
+};
