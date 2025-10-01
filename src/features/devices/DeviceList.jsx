@@ -1,6 +1,6 @@
-import { getDevices } from '@/api/device/device';
+import { deleteDevice, getDevices } from '@/api/device/device';
 import { MESSAGES } from '@/common/constants/msg';
-import { showError } from '@/common/utils/toast';
+import { showError, showSuccess } from '@/common/utils/toast';
 import Table from '@/components/Table';
 import MainLayout from '@/layouts/MainLayout';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -11,6 +11,25 @@ import { Link } from 'react-router-dom';
 const columnHelper = createColumnHelper();
 
 const columns = [
+    {
+        id: 'select',
+        header: ({ table }) => (
+            <input
+                type="checkbox"
+                checked={table.getIsAllRowsSelected()}
+                // indeterminate={table.getIsSomeRowsSelected()}
+                onChange={table.getToggleAllRowsSelectedHandler()}
+            />
+        ),
+        cell: ({ row }) => (
+            <input
+                type="checkbox"
+                checked={row.getIsSelected()}
+                disabled={!row.getCanSelect()}
+                onChange={row.getToggleSelectedHandler()}
+            />
+        ),
+    },
     columnHelper.accessor('rownum', {
         id: 'rownum',
         cell: (info) => info.getValue(),
@@ -55,6 +74,8 @@ const DeviceList = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
 
+    const [rowSelection, setRowSelection] = useState({});
+
     const loadDevices = async () => {
         try {
             const result = await getDevices(page, pageSize);
@@ -76,16 +97,48 @@ const DeviceList = () => {
         loadDevices();
     }, [page, pageSize]);
 
+    const handleDelete = async () => {
+        // 선택된 deviceId 배열
+        const selectDeviceIds = Object.keys(rowSelection);
+
+        try {
+            const result = await deleteDevice(selectDeviceIds);
+
+            if (result.success) {
+                showSuccess(MESSAGES.DELETE_SUCCESS);
+                // 선택 로우 초기화
+                setRowSelection({});
+                // 리로드
+                loadDevices();
+            } else {
+                showError(MESSAGES.SERVER_ERROR);
+            }
+        } catch (err) {
+            console.error('장비 삭제 실패: ' + err);
+            showError(MESSAGES.SERVER_ERROR);
+        }
+    };
+
     return (
         <MainLayout>
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">장비 리스트</h1>
-                <Link
-                    to="/devices/new"
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                    장비 생성
-                </Link>
+                <div className="flex gap-2">
+                    <Link
+                        to="/devices/new"
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                        장비 생성
+                    </Link>
+                    <button
+                        type="button"
+                        onClick={handleDelete}
+                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+                        disabled={Object.keys(rowSelection).length === 0}
+                    >
+                        선택 삭제
+                    </button>
+                </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -101,6 +154,9 @@ const DeviceList = () => {
                         setPageSize(newPageSize);
                         setPage(1); // 페이지 크기 바꾸면 1페이지로 초기화
                     }}
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={setRowSelection}
+                    idKey="deviceId"
                 />
             </div>
         </MainLayout>

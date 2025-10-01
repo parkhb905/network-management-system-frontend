@@ -1,4 +1,4 @@
-import { getCodes, getDevice, updateDevice } from '@/api/device/device';
+import { deleteDevice, getCodes, getDevice, updateDevice } from '@/api/device/device';
 import { MESSAGES } from '@/common/constants/msg';
 import { showError, showSuccess } from '@/common/utils/toast';
 import MainLayout from '@/layouts/MainLayout';
@@ -96,6 +96,23 @@ const DeviceDetail = () => {
         getVendors();
     }, [deviceId]);
 
+    const handleDelete = async () => {
+        try {
+            const result = await deleteDevice([deviceId]);
+
+            if (result.success) {
+                showSuccess(MESSAGES.DELETE_SUCCESS);
+                // 리로드
+                navigate('/devices');
+            } else {
+                showError(MESSAGES.SERVER_ERROR);
+            }
+        } catch (err) {
+            console.error('장비 삭제 실패: ' + err);
+            showError(MESSAGES.SERVER_ERROR);
+        }
+    };
+
     return (
         <MainLayout>
             <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
@@ -154,6 +171,13 @@ const DeviceDetail = () => {
                             className="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500"
                         >
                             취소
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleDelete}
+                            className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                        >
+                            삭제
                         </button>
                         <button
                             type="submit"
