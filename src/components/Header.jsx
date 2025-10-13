@@ -1,14 +1,27 @@
 import { logout } from '@/store/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout as logoutApi } from '@/api/auth/auth';
+import { showError } from '@/common/utils/toast';
+import { MESSAGES } from '@/common/constants/msg';
 
 export default function Header() {
     const { username, isAuthenticated } = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
-    const handleLogout = () => {
-        dispatch(logout());
-        window.location.href = '/login';
+    const handleLogout = async () => {
+        const result = await logoutApi();
+        try {
+            if (result.success) {
+                dispatch(logout());
+                window.location.href = '/login';
+            } else {
+                showError(MESSAGES.SERVER_ERROR);
+            }
+        } catch (err) {
+            console.error('로그아웃 실패: ' + err);
+            showError(MESSAGES.SERVER_ERROR);
+        }
     };
 
     return (
