@@ -12,6 +12,12 @@ export const login = async (credentials) => {
     return response.data;
 };
 
+// 로그아웃
+export const logout = async (credentials) => {
+    const response = await api.post('/auth/logout', credentials);
+    return response.data;
+};
+
 // 내 정보 조회
 export const getMyInfo = async () => {
     const response = await api.get('/auth/me');

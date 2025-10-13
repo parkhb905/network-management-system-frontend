@@ -26,7 +26,7 @@ export default function Table({
         },
         manualPagination: true,
         getCoreRowModel: getCoreRowModel(),
-        enableRowSelection: true, // row 선택 기능 활성화
+        enableRowSelection: onRowSelectionChange ? true : false, // row 선택 기능 활성화
         onRowSelectionChange,
         getRowId: (row) => row[idKey], // 고유 키 지정
     });

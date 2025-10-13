@@ -9,14 +9,33 @@ import { useDispatch } from 'react-redux';
 import { logout, setAuth } from './store/authSlice';
 import { getMyInfo } from './api/auth/auth';
 import MyPage from './features/mypage/MyPage';
-import DeviceList from './features/devices/DeviceList';
-import DeviceForm from './features/devices/DeviceForm';
+import DeviceList from './features/device/DeviceList';
+import DeviceForm from './features/device/DeviceForm';
 import CodeGroupPage from './features/codeGroup/CodeGroupPage';
 import CodePage from './features/code/codePage';
-import DeviceDetail from './features/devices/DeviceDetail';
+import DeviceDetail from './features/device/DeviceDetail';
+import LogList from './features/log/LogList';
+import { logout as logoutApi } from '@/api/auth/auth';
+import { showError } from './common/utils/toast';
+import { MESSAGES } from './common/constants/msg';
 
 export default function App() {
     const dispatch = useDispatch();
+
+    const handleLogout = async () => {
+        const result = await logoutApi();
+        try {
+            if (result.success) {
+                dispatch(logout());
+                window.location.href = '/login';
+            } else {
+                showError(MESSAGES.SERVER_ERROR);
+            }
+        } catch (err) {
+            console.error('로그아웃 실패: ' + err);
+            showError(MESSAGES.SERVER_ERROR);
+        }
+    };
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
@@ -32,10 +51,10 @@ export default function App() {
                     dispatch(setAuth(data));
                 })
                 .catch((err) => {
-                    dispatch(logout());
+                    handleLogout();
                 });
         } catch (err) {
-            dispatch(logout());
+            handleLogout();
         }
     }, [dispatch]);
 
@@ -57,6 +76,7 @@ export default function App() {
                         <Route path="/devices/:deviceId" element={<DeviceDetail />} />
                         {/* <Route path="/codeGroup" element={<CodeGroupPage />} /> */}
                         {/* <Route path="/code" element={<CodePage />} /> */}
+                        <Route path="/logs" element={<LogList />} />
                     </Route>
 
                     {/* 이외 경로: 리다이렉트 */}
