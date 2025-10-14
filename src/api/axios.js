@@ -28,8 +28,13 @@ api.interceptors.response.use(
         const status = error.response?.status;
         const code = error.response?.data?.code;
 
-        // accessToken 만료 (401) && 1001, 1002 제외 && 재시도 한 번도 안한 경우
-        if (status === 401 && code !== 1001 && code !== 1002 && !originalRequest._retry) {
+        // refresh 요청은 재시도 금지
+        if (originalRequest.url.includes('/auth/refresh')) {
+            return Promise.reject(error);
+        }
+
+        // (1) 토큰 만료 -> accessToken 재발급 시도
+        if (status === 401 && code == 1003 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
@@ -37,7 +42,7 @@ api.interceptors.response.use(
                 const refreshToken = localStorage.getItem('refreshToken');
                 if (!refreshToken) throw new Error('No refresh token');
 
-                const response = await axios.post('/api/auth/refresh', { refreshToken });
+                const response = await api.post('/auth/refresh', { refreshToken });
                 const newAccessToken = response.data.accessToken;
                 localStorage.setItem('accessToken', newAccessToken);
 
@@ -51,6 +56,14 @@ api.interceptors.response.use(
                 window.location.href = '/login';
                 return Promise.reject(err);
             }
+        }
+
+        // (2) refresh 실패 또는 만료된 토큰으로 요청한 경우 (403)
+        if (status === 403) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('username');
+            window.location.href = '/login';
         }
 
         return Promise.reject(error);
