@@ -1,4 +1,4 @@
-import { deleteUser, updateUser } from '@/api/user/user';
+import { deleteMyAccount, updateMyInfo } from '@/api/user/meApi';
 import { MESSAGES } from '@/common/constants/msg';
 import { showError, showSuccess, showWarning } from '@/common/utils/toast';
 import { emailFormat, lengthBetween, validateForm } from '@/common/utils/validator';
@@ -72,7 +72,7 @@ const MyPage = () => {
         }
 
         try {
-            const result = await updateUser(payload);
+            const result = await updateMyInfo(payload);
 
             if (result.success) {
                 showSuccess('회원정보가 수정되었습니다.');
@@ -89,7 +89,7 @@ const MyPage = () => {
 
     const handleDelete = async () => {
         try {
-            const result = await deleteUser();
+            const result = await deleteMyAccount();
 
             if (result.success) {
                 showSuccess('회원탈퇴 되었습니다.');

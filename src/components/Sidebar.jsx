@@ -26,11 +26,8 @@ export default function Sidebar() {
                         <Link to="/logs" className="block px-3 py-2 rounded hover:bg-gray-700">
                             Logs
                         </Link>
-                        <Link
-                            to="/management"
-                            className="block px-3 py-2 rounded hover:bg-gray-700"
-                        >
-                            Management
+                        <Link to="/users" className="block px-3 py-2 rounded hover:bg-gray-700">
+                            User Management
                         </Link>
                     </>
                 )}

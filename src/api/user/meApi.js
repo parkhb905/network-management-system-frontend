@@ -1,11 +1,11 @@
 import api from '../axios';
 
-export const updateUser = async (formData) => {
+export const updateMyInfo = async (formData) => {
     const response = await api.put('/user/me', formData);
     return response.data;
 };
 
-export const deleteUser = async () => {
+export const deleteMyAccount = async () => {
     const response = await api.delete('/user/me');
     return response.data;
 };
