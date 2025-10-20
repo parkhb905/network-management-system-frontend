@@ -18,6 +18,7 @@ import LogList from './features/log/LogList';
 import { logout as logoutApi } from '@/api/auth/auth';
 import { showError } from './common/utils/toast';
 import { MESSAGES } from './common/constants/msg';
+import UserPage from './features/user/UserPage';
 
 export default function App() {
     const dispatch = useDispatch();
@@ -77,6 +78,7 @@ export default function App() {
                         {/* <Route path="/codeGroup" element={<CodeGroupPage />} /> */}
                         {/* <Route path="/code" element={<CodePage />} /> */}
                         <Route path="/logs" element={<LogList />} />
+                        <Route path="/users" element={<UserPage />} />
                     </Route>
 
                     {/* 이외 경로: 리다이렉트 */}
