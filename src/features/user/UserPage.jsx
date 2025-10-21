@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import UserList from './UserList';
+import UserForm from './UserForm';
 
 const UserPage = () => {
     const [pageType, setPageType] = useState('list');
@@ -12,7 +13,11 @@ const UserPage = () => {
             )}
 
             {(pageType === 'create' || pageType === 'edit') && (
-                <UserForm setPageType={setPageType} selectedUser={selectedUser} />
+                <UserForm
+                    pageType={pageType}
+                    setPageType={setPageType}
+                    selectedUser={selectedUser}
+                />
             )}
         </>
     );

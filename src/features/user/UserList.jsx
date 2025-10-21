@@ -21,15 +21,22 @@ const UserList = ({ setPageType, setSelectedUser }) => {
             id: 'username',
             cell: (info) => {
                 return (
-                    <Link
-                        to={`/devices/${info.row.original.username}`}
-                        className="text-blue-600 hover:underline"
+                    <span
+                        onClick={() => {
+                            setPageType('edit');
+                            setSelectedUser(info.row.original);
+                        }}
                     >
                         {info.getValue()}
-                    </Link>
+                    </span>
                 );
             },
             header: () => <span>아이디</span>,
+        }),
+        columnHelper.accessor((row) => row.name, {
+            id: 'name',
+            cell: (info) => info.getValue(),
+            header: () => <span>이름</span>,
         }),
         columnHelper.accessor('createdAt', {
             header: '가입일시',
@@ -68,7 +75,7 @@ const UserList = ({ setPageType, setSelectedUser }) => {
     return (
         <MainLayout>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">장비 리스트</h1>
+                <h1 className="text-2xl font-bold">사용자 리스트</h1>
             </div>
 
             <div className="overflow-x-auto">
@@ -85,6 +92,10 @@ const UserList = ({ setPageType, setSelectedUser }) => {
                         setPage(1); // 페이지 크기 바꾸면 1페이지로 초기화
                     }}
                     idKey="userId"
+                    onRowClick={(row) => {
+                        setPageType('edit');
+                        setSelectedUser(row);
+                    }}
                 />
             </div>
         </MainLayout>

@@ -33,6 +33,7 @@ export default function LoginPage() {
 
         try {
             const {
+                userId,
                 accessToken,
                 refreshToken,
                 username: serverUsername,
@@ -48,7 +49,9 @@ export default function LoginPage() {
             localStorage.setItem('refreshToken', refreshToken);
 
             // Redux 반영
-            dispatch(setAuth({ username: serverUsername, email: email, role: role }));
+            dispatch(
+                setAuth({ userId: userId, username: serverUsername, email: email, role: role })
+            );
 
             // LocalStorage 반영
             localStorage.setItem('username', serverUsername);
