@@ -38,6 +38,19 @@ export default function App() {
         }
     };
 
+    const loadMyInfo = async () => {
+        try {
+            const result = await getMyInfo();
+            if (result) {
+                dispatch(setAuth(result));
+            } else {
+                handleLogout();
+            }
+        } catch (err) {
+            handleLogout();
+        }
+    };
+
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) return;
@@ -47,13 +60,7 @@ export default function App() {
             const savedUsername = localStorage.getItem('username');
             if (savedUsername) dispatch(setAuth({ username: savedUsername }));
 
-            getMyInfo()
-                .then((data) => {
-                    dispatch(setAuth(data));
-                })
-                .catch((err) => {
-                    handleLogout();
-                });
+            loadMyInfo();
         } catch (err) {
             handleLogout();
         }

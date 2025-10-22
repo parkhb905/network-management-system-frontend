@@ -10,12 +10,16 @@ export const getDeviceCountByVendor = async () => {
     return response.data;
 };
 
-export const getCpuTop5 = async () => {
-    const response = await api.get('/dashboard/resource/cpu-top5');
+export const getCpuTop5 = async (period) => {
+    const response = await api.get('/dashboard/resource/cpu-top5', {
+        params: { period },
+    });
     return response.data;
 };
 
-export const getMemoryTop5 = async () => {
-    const response = await api.get('/dashboard/resource/memory-top5');
+export const getMemoryTop5 = async (period) => {
+    const response = await api.get('/dashboard/resource/memory-top5', {
+        params: { period },
+    });
     return response.data;
 };

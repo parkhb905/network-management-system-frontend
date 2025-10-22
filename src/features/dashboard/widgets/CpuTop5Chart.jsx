@@ -12,7 +12,7 @@ export default function CpuTop5Chart() {
 
     const loadCpuTop5 = async () => {
         try {
-            const result = await getCpuTop5();
+            const result = await getCpuTop5(period);
 
             if (result.success) {
                 setData(result.data);
